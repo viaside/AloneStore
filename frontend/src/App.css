@@ -1,0 +1,41 @@
+@font-face {
+    font-family: 'TrixiePro';
+    src: url('./resurses/TrixiePro-Heavy.woff2') format('woff2'),
+        url('./resurses/TrixiePro-Heavy.woff') format('woff');
+    font-weight: 600;
+    font-style: normal;
+    font-display: swap;
+}
+
+:root{
+    --black: #000;
+    --gray-text: #797979;
+    --gray-element: #DBDBDB;
+    --font-small: 20px;
+    --font-medium: 24px;
+    --font-big: 32px;
+
+}
+
+*{ 
+    font-family: TrixiePro;
+}
+
+body{
+    margin: 0px;
+    padding: 0px;
+    height: 100vh;
+    width: 100vw;
+}
+
+.Container{
+    max-width: 1400px;
+    margin-left: auto;
+    margin-right: auto;
+    padding: 0;
+    padding-top: 40px;
+}
+
+.MobileContainer{
+    padding: 10px 5px 0px 5px;
+}
