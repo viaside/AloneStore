@@ -29,7 +29,7 @@ const P = styled.p`
 
 
 function OrderUserDesktop(props) {
-    const {id, date, status, products, Desc} = props.props;
+    const {id, date, status, fullName, PhoneNumber, address, products, Desc} = props.props;
 
     return(
         <Order>
@@ -61,6 +61,10 @@ function OrderUserDesktop(props) {
                     <P>Description</P>
                     <P>{Desc}</P>
                 </div>
+            </div>
+            <div>
+                <P>{fullName}</P>
+                <P>{address}</P>
             </div>
         </Order>
     )
