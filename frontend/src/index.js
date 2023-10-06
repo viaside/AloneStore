@@ -12,6 +12,8 @@ import CatalogItem from './page/CatalogItem';
 import About from './page/About';
 import Cart from './page/Cart';
 import Profile from './page/Profile';
+import Login from './page/Login';
+import Register from './page/Register';
 import './App.css'
 
 const router = createBrowserRouter([
@@ -38,6 +40,14 @@ const router = createBrowserRouter([
   {
     path: "Profile",
     element: <Profile/>,
+  },
+  {
+    path: "Login",
+    element: <Login/>,
+  },
+  {
+    path: "Register",
+    element: <Register/>,
   },
 ]);
 
