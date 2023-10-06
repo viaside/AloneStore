@@ -2,6 +2,7 @@ import React from "react";
 import styled from "styled-components";
 
 const InputCustom = styled.input`
+    max-width: 100%;
     font-size: 24px;
     background-color: transparent;
     color: black;  
@@ -18,7 +19,7 @@ const InputCustom = styled.input`
 `
 
 function Input(props) {
-    const {text, func, placeholder} = props;
+    const {text, placeholder} = props;
 
     return(
         <InputCustom placeholder={placeholder}>{text}</InputCustom>

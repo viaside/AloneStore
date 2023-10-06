@@ -1,8 +1,8 @@
 import React, { useState } from "react";
 import { useMediaQuery } from "react-responsive";
+import styled from "styled-components";
 
 import ProductCart from "../component/ProductCart/ProductCart";
-import styled from "styled-components";
 
 let Products = [
         {
