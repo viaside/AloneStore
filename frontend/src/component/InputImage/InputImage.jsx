@@ -2,8 +2,8 @@ import React, { useState } from "react";
 import styled from "styled-components";
 
 const InputCustom = styled.input`
-    max-width: 100%;
-    font-size: 24px;
+    width: 100px;
+    height: 50px;
     background-color: transparent;
     color: black;  
     transition: 0.5s;
@@ -18,13 +18,13 @@ const InputCustom = styled.input`
     }
 `
 
-function Input(props) {
+function InputImage(props) {
     const {text, placeholder} = props;
-    const [Text, SetText] = useState(text);
+    const [img, SetText] = useState(text);
 
     return(
-        <InputCustom value={Text} onChange={e => SetText(e.target.value)} placeholder={placeholder}/>
+        <InputCustom type="image" src={img} value={img} onChange={e => SetText(e.target.value)} alt={placeholder}/>
     )
 }
 
-export default Input 
+export default InputImage 

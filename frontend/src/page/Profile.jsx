@@ -8,13 +8,14 @@ import Button from "../component/Button/Button";
 
 const Container = styled.div`
     display: flex;
-    flex-direction: row;
+    flex-direction: ${props => props.isMobile? "column" : "row"};
+    align-items: ${props => props.isMobile? "center" : ""};
     width: 100%;
 `
 
 const Filter = styled.div`
     display: flex;
-    width: 20%;
+    width: ${props => props.isMobile? "" : "20%"};
     flex-direction: ${props => props.isMobile? "row" : "column"};
     justify-content: ${props => props.isMobile? " center" : ""};
 ` 
@@ -50,7 +51,7 @@ function Profile() {
     const isMobile = useMediaQuery({ query: '(max-width: 750px)' });
 
     return (
-        <Container className={useMediaQuery({ query: '(max-width: 750px)' })? "" : "Container"}>
+        <Container isMobile={isMobile} className={useMediaQuery({ query: '(max-width: 750px)' })? "" : "Container"}>
             <Filter isMobile={isMobile}>
                 <FilterButton active={ NowPage === "Info" ? true : false} onClick={() => SetPage("Info")}>Info</FilterButton>
                 <FilterButton active={ NowPage === "Orders" ? true : false} onClick={() => SetPage("Orders")}>Orders</FilterButton>

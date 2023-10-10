@@ -9,20 +9,21 @@ import Button from "../component/Button/Button";
 
 const Container = styled.div`
     display: flex;
-    flex-direction: row;
+    flex-direction: ${props => props.isMobile? "column" : "row"};
+    align-items: ${props => props.isMobile? "center" : ""};
     justify-content: space-between;
 ` 
 
 const ContainerCart = styled.div`
     display: flex;
     flex-direction: column;
-    width: 55%;
+    width: ${props => props.isMobile? "90%" : "55%"};
 `
 
 const ContainerAddres = styled.div`
     display: flex;
     flex-direction: column;
-    width: 40%;
+    width: ${props => props.isMobile? "90%" : "40%"};
 ` 
 
 const Label = styled.p`
@@ -34,16 +35,18 @@ const Label = styled.p`
 
 
 function Cart() {
+    const isMobile = useMediaQuery({ query: '(max-width: 750px)' });
+
     return (
-        <Container className={useMediaQuery({ query: '(max-width: 750px)' })? "" : "Container"}>
-            <ContainerCart>
+        <Container isMobile={isMobile} className={useMediaQuery({ query: '(max-width: 750px)' })? "" : "Container"}>
+            <ContainerCart isMobile={isMobile}>
                 <h1 style={{color: "black"}}>Your Cart</h1>
                 <CartItem id = "1" img = "1" name = "Product Name" price = "400" count = {2} size = "M" Deleted = {() => alert("Deleted")}/>
                 <CartItem id = "1" img = "1" name = "Product Name" price = "400" count = {2} size = "M" Deleted = {() => alert("Deleted")}/>
                 <CartItem id = "1" img = "1" name = "Product Name" price = "400" count = {2} size = "M" Deleted = {() => alert("Deleted")}/>
                 <Label style={{textAlign: "right"}}>SubTotal: 400$</Label>
             </ContainerCart>
-            <ContainerAddres>
+            <ContainerAddres isMobile={isMobile}> 
                 <h1>Dilivery address</h1>
                 <Label>Full name</Label>
                 <Input text={null} func={null} placeholder="Text..."/>
