@@ -8,13 +8,14 @@ import ProductModalStock from "./ProductModalStock";
 import ProductModalSetting from "./ProductModalSetting";
 
 const ProductCart = styled.div`
-    display: grid;
+    display: flex;
+    flex-direction: column;
     align-items: center;
     grid-template-columns: repeat(6, 2fr);
-    height: 100px;
     padding: 0px 5px;
     border-top: 1px solid #DBDBDB;
     border-bottom: 1px solid #DBDBDB;
+    margin: 5px;
 `
 
 const Img = styled.img`
@@ -53,29 +54,34 @@ const StockButton = styled(StockIcon)`
 
 function ProductAdminMobile(props) {
     const {id, img, name, category, price, Deleted} = props.props;
+
     const [isShowStock, showStock] = useState(false);
     const [isShowSetting, showSetting] = useState(false);
 
     return(
         <ProductCart>
-                <P>№{id}</P>
+            <div style={{display: "flex"}}>
                 <Img src={img}/>
+                <P>№{id}</P>
+            </div>
+            <div style={{display: "flex"}}>
                 <P>{name}</P>
                 <P>{category}</P>
                 <P>{price}$</P>
-                <div style={{marginLeft: "auto"}}>
-                    <StockButton onClick={() => showStock(true)}/>
-                    <SettingButton onClick={() => showSetting(true)}/>
-                    <DeleteButton onClick={() => Deleted()} />
-                </div>
-                <ProductModalStock 
-                    id={id} name={name} oneSize={true} total={1000} s={200} m={200} l={200} xl={400}
-                    isShow={isShowStock} close={() => showStock(false)}
-                />
-                <ProductModalSetting 
-                    id={id} name={name} desc={"nice t-shirt"} category={"t-shirt"} price={400} phone={"+7(999)999-99-99"} img={{main: '1', front: '2', back: '3'}}
-                    isShow={isShowSetting} close={() => showSetting(false)}
-                />
+            </div>
+            <div style={{display: "flex"}}>
+                <StockButton onClick={() => showStock(true)}/>
+                <SettingButton onClick={() => showSetting(true)}/>
+                <DeleteButton onClick={() => Deleted()} />
+            </div>
+            <ProductModalStock 
+                id={id} name={name} oneSize={true} total={1000} s={200} m={200} l={200} xl={400}
+                isShow={isShowStock} close={() => showStock(false)}
+            />
+            <ProductModalSetting 
+                id={id} name={name} desc={"nice t-shirt"} category={"t-shirt"} price={400} phone={"+7(999)999-99-99"} img={{main: '1', front: '2', back: '3'}}
+                isShow={isShowSetting} close={() => showSetting(false)}
+            />
         </ProductCart>
     )
 }

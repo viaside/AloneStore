@@ -23,12 +23,12 @@ const FlexDiv = styled.div`
 `
 
 const Img = styled.img`
-    width: 50px;
-    height: 50px;
+    width: 40px;
+    height: 40px;
 `
 
 const P = styled.p`
-    font-size: var(--font-small);
+    font-size: 15px;
     padding: 0px 10px;
     margin: 0px;
 `

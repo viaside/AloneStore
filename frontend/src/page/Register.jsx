@@ -8,6 +8,7 @@ import Button from "../component/Button/Button";
 const Container = styled.div`
     display: flex;
     flex-direction: column;
+    margin: ${props => props.isMobile? "5px" : ""};
 `
 
 const Label = styled.p`
@@ -28,8 +29,10 @@ const A = styled.a`
 `
 
 function Register() {
+    const isMobile = useMediaQuery({ query: '(max-width: 750px)' });
+
     return (
-        <Container className={useMediaQuery({ query: '(max-width: 750px)' })? "" : "Container"}>
+        <Container isMobile={isMobile} className={useMediaQuery({ query: '(max-width: 750px)' })? "" : "Container"}>
             <BigText>Register</BigText>
             <Label>Login</Label>
             <Input text={null} placeholder="Login"/>

@@ -4,6 +4,7 @@ import styled from "styled-components";
 import Input from "../Input/Input";
 import InputImage from "../InputImage/InputImage";
 import Button from "../Button/Button";
+import { useMediaQuery } from "react-responsive";
 
 const Modal = styled.div`
     display: ${props => props.show ? "block" : "none"}; 
@@ -26,7 +27,7 @@ const Content = styled.div`
     margin: 5% auto;
     padding: 20px;
     border: 1px solid #888;
-    width: 40%;
+    width: ${props => props.isMobile? "80%" : "50%"};
     border-radius: 20px; 
 `
 const ElContainer = styled.div`
@@ -43,10 +44,11 @@ const P = styled.p`
 
 function ProductModalSetting(props){
     const {id, name, desc, category, price, phone, img} = props;
+    const isMobile = useMediaQuery({ query: '(max-width: 750px)' });
 
     return(
         <Modal show={props.isShow}>
-            <Content>
+            <Content isMobile={isMobile}>
                 <h1>{name}</h1>
                 <ElContainer>
                     <P>Name</P>

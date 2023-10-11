@@ -1,7 +1,7 @@
 import React from "react";
 import { useMediaQuery } from "react-responsive";
 
-import OrderAdmin from "../component/ProductAdmin/ProductAdmin";
+import OrderAdmin from "../component/OrderAdmin/OrderAdmin";
 
 function Main() {
     return (
