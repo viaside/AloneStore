@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import { useMediaQuery } from "react-responsive";
 import styled from "styled-components";
 
@@ -30,16 +30,56 @@ const A = styled.a`
 
 function Login() {
     const isMobile = useMediaQuery({ query: '(max-width: 750px)' });
+    const [Login, setLogin] = useState(null); 
+    const [Password, setPassword] = useState(null); 
+
+    const HandleChange = (event) => {
+        switch (event.target.name) {
+            case "Login":
+                setLogin(event.target.value);
+                break;
+            case "Password": 
+                setPassword(event.target.value);
+                break;
+            default:
+                break;
+        }
+    }
+
+    const LoginUser = () => {
+        const requestOptions = {
+            method: 'GET',
+            headers: { 'Content-Type': 'application/json' },
+        };
+        fetch(`/userLogin/${Login}&${Password}`, requestOptions)
+        .then(res => {
+            if(res.status >= 400){
+                res?.json().then((e) => {
+                    alert(e.message)
+                })    
+            } else{
+                res.json().then((e) => {
+                    if(e.length > 0){
+                        localStorage.setItem("isLogined", true);
+                        window.location.href = '/';
+                        localStorage.setItem("userId", e[0].id);
+                    } else{
+                        alert("not found")
+                    }
+                })    
+            }
+        })
+    }
 
     return (
         <Container isMobile={isMobile}s className={useMediaQuery({ query: '(max-width: 750px)' })? "" : "Container"}>
             <BigText>Welcome back</BigText>
             <Label>Login</Label>
-            <Input text={null} placeholder="Login"/>
+            <Input name = "Login" value={Login} onChange={(e) => HandleChange(e)} text={null} placeholder="Login"/>
             <Label>Password</Label>
-            <Input text={null} placeholder="Password"/>
+            <Input name = "Password" value={Password} onChange={(e) => HandleChange(e)} text={null} placeholder="Password"/>
             <br />
-            <Button text="Login" func={() => alert("Logined")}/>
+            <Button text="Login" func={() => LoginUser()}/>
             <A href="../Register">Not a memder? Sign up now</A>
         </Container>
     )

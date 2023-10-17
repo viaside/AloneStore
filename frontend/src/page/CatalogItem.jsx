@@ -88,7 +88,7 @@ function CatalogItem() {
                     <SizeSelector XS={0} S={0} M={1} L={1} XL={0}/>
                     <ProductCartFunc>
                         <Counter/>
-                        <Button text="Buy" func={() => alert("Bought")}/>
+                        <Button func={() => alert("Bought")}>Buy</Button>
                     </ProductCartFunc>
                     <TextSmall style={{color: "var(--gray-text)"}} >
                         Премиум футер петля (340гр), 80% хлопок<br/>

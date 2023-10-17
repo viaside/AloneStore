@@ -43,47 +43,71 @@ const P = styled.p`
 `
 
 function ProductModalSetting(props){
-    const {id, name, desc, category, price, phone, img} = props;
+    const {id, name, desc, category, price, img, isNew, func} = props;
     const isMobile = useMediaQuery({ query: '(max-width: 750px)' });
+    
+    const [Name, setName] = useState(null); 
+    const [Desc, setDesc] = useState(null); 
+    const [Category, setCategory] = useState(null); 
+    const [Price, setPrice] = useState(null); 
+    const [Img, setImg] = useState(null); 
 
+    const HandleChange = (event) => {
+        switch (event.target.name) {
+            case "Name":
+                setName(event.target.value);
+                break;
+            case "Desc": 
+                setDesc(event.target.value);
+                break;
+            case "Category": 
+                setCategory(event.target.value);                   
+                break;
+            case "Price": 
+                setPrice(event.target.value);
+                break;
+            case "Img":
+                setImg(event.target.value);
+                break;
+            default:
+                break;
+        }
+    }
+    
     return(
         <Modal show={props.isShow}>
             <Content isMobile={isMobile}>
                 <h1>{name}</h1>
                 <ElContainer>
                     <P>Name</P>
-                    <Input text={name} placeholder={"name"}/>
+                    <Input name="Name" value={Name} onChange={HandleChange} text={name} placeholder={"name"}/>
                 </ElContainer>
                 <ElContainer>
                     <P>Desctiption</P>
-                    <Input text={desc} placeholder={"description"}/>
+                    <Input name="Desc" value={Desc} onChange={HandleChange} text={desc} placeholder={"description"}/>
                 </ElContainer>
                 <ElContainer>
                     <P>Category</P>
-                    <Input text={category} placeholder={"Category"}/>
+                    <Input name="Category" value={Category} onChange={HandleChange} text={category} placeholder={"Category"}/>
                 </ElContainer>
                 <ElContainer>
                     <P>Price</P>
-                    <Input text={price} placeholder={"Price"}/>
-                </ElContainer>
-                <ElContainer>
-                    <P>Phone number</P>
-                    <Input text={phone} placeholder={"Phone number"}/>
+                    <Input name="Price" value={Price} onChange={HandleChange} text={price} placeholder={"Price"}/>
                 </ElContainer>
                 <ElContainer>
                     <P>Image</P>
                     <div style={{display: "flex", justifyContent: "space-around"}}>
-                        <InputImage text={img.Main} placeholder={"Main"}/>
-                        <InputImage text={img.Front} placeholder={"Front"}/>
-                        <InputImage text={img.Back} placeholder={"Back"}/>
+                        <InputImage text={img?.Main} placeholder={"Main"}/>
+                        <InputImage text={img?.Front} placeholder={"Front"}/>
+                        <InputImage text={img?.Back} placeholder={"Back"}/>
                     </div>
                 </ElContainer>
                 <div style={{display: "flex", justifyContent: "space-around", width: "100%"}}>
                     <div style={{width: "100%", marginRight: 50}}>
-                    <Button func={() => props.close()} text="Save"/>
+                    <Button onClick={() => {props.close(); func(isNew, Name, Desc, Category, Price, Img)}}>Save</Button>
                     </div>
                     <div style={{width: "100%"}}>
-                    <Button func={() => props.close()} text="Cancel"/>
+                    <Button onClick={() => props.close()}>Cancel</Button>
                     </div>
                 </div>
             </Content>

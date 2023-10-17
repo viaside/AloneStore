@@ -20,7 +20,7 @@ app.use(
   })
 )
 
-app.get('/userLogin', User.login)
+app.get('/userLogin/:login&:password', User.login)
 app.get('/users', User.getUser)
 app.get('/users/:id', User.getUserById)
 app.post('/users', User.createUser)

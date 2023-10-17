@@ -1,7 +1,7 @@
-const db = require('./queries').pool;
+const pool = require('./queries').pool;
 
 const getCartDetail = (request, response) => {
-    db.query('SELECT * FROM public.cart_detail ORDER BY id ASC', (error, results) => {
+    pool.query('SELECT * FROM public.cart_detail ORDER BY id ASC', (error, results) => {
         if (error) {
             throw error
         }
@@ -73,6 +73,7 @@ const deleteCartDetail = (request, response) => {
 module.exports = {
     getCartDetail,
     getCartDetailById,
+    getCartDetailByCartId,
     createCartDetail,
     updateCartDetail,
     deleteCartDetail

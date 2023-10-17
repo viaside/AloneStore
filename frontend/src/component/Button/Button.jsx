@@ -1,7 +1,7 @@
 import React from "react";
 import styled from "styled-components";
 
-const ButtonCustom = styled.button`
+const Button = styled.button`
     font-size: 20px;
     width: 100%;
     height: 45px;
@@ -16,12 +16,5 @@ const ButtonCustom = styled.button`
     }
 `
 
-function Button(props) {
-    const {text, func} = props;
-
-    return(
-        <ButtonCustom onClick={() => func()}>{text}</ButtonCustom>
-    )
-}
 
 export default Button 

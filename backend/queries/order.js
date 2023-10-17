@@ -1,7 +1,7 @@
-const db = require('./queries').pool;
+const pool = require('./queries').pool;
 
 const getOrder = (request, response) => {
-    db.query('SELECT * FROM public.orders ORDER BY id ASC', (error, results) => {
+    pool.query('SELECT * FROM public.orders ORDER BY id ASC', (error, results) => {
         if (error) {
             throw error
         }

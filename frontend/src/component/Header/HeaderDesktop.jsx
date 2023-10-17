@@ -46,7 +46,11 @@ function HeaderDesktop() {
                 <Logo style={{height: "60px", position: "absolute", right: "0px", left: "0px", margin:"0 auto"}}/>
                 <div>
                     <Link href="/Cart">Cart</Link>
+                    {localStorage.getItem("isLogined") === "true"? 
                     <Link style={{padding: 0}} href="/Profile">Profile</Link>
+                    :
+                    <Link style={{padding: 0}} href="/Login">Login</Link>
+                    }
                 </div>
             </Container>
         </Header>

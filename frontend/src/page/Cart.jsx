@@ -55,7 +55,7 @@ function Cart() {
                 <Label  >Phone number</Label>
                 <Input text={null} func={null} placeholder="Text..."/>
                 <p>The shopping cart automatically remembers the entered data (exclusively on your device), so you won't have to fill in the fields next time.</p>
-                <Button text="Buy" func={() => alert("Bought")}/>
+                <Button func={() => alert("Bought")}>Buy</Button>
                 <p>Taxes are included. Worldwide shipping with Alone Store tracking.</p>
             </ContainerAddres>
         </Container>

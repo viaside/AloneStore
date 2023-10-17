@@ -1,7 +1,7 @@
-const db = require('./queries').pool;
+const pool = require('./queries').pool;
 
 const getUser = (request, response) => {
-    db.query('SELECT * FROM public."user" ORDER BY id ASC', (error, results) => {
+    pool.query('SELECT * FROM public."user" ORDER BY id ASC', (error, results) => {
         if (error) {
             throw error
         }
@@ -10,13 +10,14 @@ const getUser = (request, response) => {
 }
   
 const login = (request, response) => {
-    const {login, password} = request.body;
-
-    pool.query('SELECT * FROM public."user" WHERE login = $1, password = $2', [login, password], (error, results) => {
+    const loginData = request.params.login
+    const passwordData = request.params.password
+    pool.query('SELECT * FROM public."user" WHERE login = $1 AND password = $2', [loginData, passwordData], (error, results) => {
         if (error) {
-            throw error
+            response.status(400).json('not found')
+        } else{
+            response.status(200).json(results?.rows);
         }
-        response.status(200).json('success')
     })
 }
 
@@ -31,24 +32,37 @@ const getUserById = (request, response) => {
     })
 }
 
+const getUserByLogin = (request, response) => {
+    const id = parseInt(request.params.id)
+
+    pool.query('SELECT * FROM public."user" WHERE login = $1', [id], (error, results) => {
+        if (error) {
+            throw error
+        }
+        response.status(200).json(results.rows)
+    })
+}
+
 const createUser = (request, response) => {
     const {login, password, phone_number, email, full_name, address, is_admin} = request.body
 
     pool.query('INSERT INTO public."user" (login, password, phone_number, email, full_name, address, is_admin) VALUES ($1, $2, $3, $4, $5, $6, $7)', 
     [login, password, phone_number, email, full_name, address, is_admin], (error, results) => {
         if (error) {
-            throw error
+            response.status(400).json({status: 400, message: error})
+        } else{
+            response.status(201).send(login)
+            console.log(response.insertId)
         }
-        response.status(201).send(`Users added with ID: ${results.insertId}`)
     })
 }
 
 const updateUser = (request, response) => {
     const id = parseInt(request.params.id)
-    const { login, password, phone_number, email, full_name, address, is_admin } = request.body
+    const { login, password, phone_number, email, full_name, address} = request.body
 
     pool.query(
-        'UPDATE public."user" SET login = $1, password = $2, phone_number = $3, email = $4, full_name = $5, address = $6, is_admin = $7 WHERE id = $8',
+        'UPDATE public."user" SET login = $1, password = $2, phone_number = $3, email = $4, full_name = $5, address = $6 WHERE id = $7',
         [login, password, phone_number, email, full_name, address, is_admin, id],
         (error, results) => {
             if (error) {
@@ -74,6 +88,7 @@ module.exports = {
     login,
     getUser,
     getUserById,
+    getUserByLogin,
     createUser,
     updateUser,
     deleteUser

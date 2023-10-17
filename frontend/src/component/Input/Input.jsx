@@ -1,7 +1,6 @@
-import React, { useState } from "react";
 import styled from "styled-components";
 
-const InputCustom = styled.input`
+const Input = styled.input`
     max-width: 100%;
     font-size: 24px;
     background-color: transparent;
@@ -17,14 +16,4 @@ const InputCustom = styled.input`
         outline: null;
     }
 `
-
-function Input(props) {
-    const {text, placeholder} = props;
-    const [Text, SetText] = useState(text);
-
-    return(
-        <InputCustom value={Text} onChange={e => SetText(e.target.value)} placeholder={placeholder}/>
-    )
-}
-
 export default Input 

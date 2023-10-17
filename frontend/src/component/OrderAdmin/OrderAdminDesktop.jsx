@@ -71,7 +71,7 @@ function OrderUserDesktop(props) {
             <Info>
                 <P>{id}</P>
                 <P>{userName}</P>
-                <P>{address}</P>
+                <p>{address}</p>
                 <P>{date}</P>
                 <P>{totalPrice}$</P>
                 <Select name="status">

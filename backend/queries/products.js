@@ -1,8 +1,8 @@
-const db = require('./queries').pool;
+const pool = require('./queries').pool;
 const qunatity = require('./quantity_product');
 
 const getProduct = (request, response) => {
-    db.query('SELECT * FROM public.products ORDER BY id ASC', (error, results) => {
+    pool.query('SELECT * FROM public.products ORDER BY id ASC', (error, results) => {
         if (error) {
             throw error
         }
@@ -22,7 +22,7 @@ const getProductById = (request, response) => {
 }
 
 const createProduct = (request, response) => {
-    const {name, desc, category_id, price, mainImg, frontImg, backImg } = request.body
+    const {name, desc, category_id, price, mainImg, frontImg, backImg} = request.body
 
     pool.query('INSERT INTO public.products (name, "desc", category_id, price, main_img, front_img, back_img) VALUES ($1, $2, $3, $4, $5, $6, $7)', 
     [name, desc, category_id, price, mainImg, frontImg, backImg], (error, results) => {
