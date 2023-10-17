@@ -79,7 +79,7 @@ function Login() {
             <Label>Password</Label>
             <Input name = "Password" value={Password} onChange={(e) => HandleChange(e)} text={null} placeholder="Password"/>
             <br />
-            <Button text="Login" func={() => LoginUser()}/>
+            <Button onClick={() => LoginUser()}>Login</Button>
             <A href="../Register">Not a memder? Sign up now</A>
         </Container>
     )

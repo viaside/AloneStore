@@ -59,6 +59,8 @@ function Profile() {
     const [Email, setEmail] = useState(null); 
     const [Phone, setPhone] = useState(null); 
     const [Address, setAddress] = useState(null); 
+    const [Category, setCategory] = useState(); 
+    const [Quantity, setQuantity] = useState(); 
     const [isShowAddProductModal, showAddProductModal] = useState(false); 
     const isMobile = useMediaQuery({ query: '(max-width: 750px)' });
 
@@ -87,9 +89,17 @@ function Profile() {
         })
         .then((response) => response.json())
         .then(async (data) => {
-            setProducts(data);
+            await setProducts(data);
         })
         .catch((error) => console.log(error));
+        fetch('/category',{
+            method: "GET"
+        })
+        .then((response) => response.json())
+        .then(async (data) => {
+            setCategory(data)
+        })
+        console.log("update");
     }
 
     function DeleteProduct(id){
@@ -97,33 +107,29 @@ function Profile() {
             method: "Delete",
         })
         .then((response) => response.json())
-        .then(async (data) => {
-            UpdateProduct();
-        })
+        .then(
+            UpdateProduct()
+        )
         .catch((error) => console.log(error));
     }
 
-    function FuncWithProduct(isNew, name, desc, category_id, price, mainImg, frontImg, backImg){
+    function FuncWithProduct(id, isNew, name, desc, category_id, price, mainImg, frontImg, backImg, is_one_size){
         if(isNew){
             const requestOptions = {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify({ name: name, desc: desc, category_id: category_id, price: price, mainImg: mainImg, frontImg: frontImg, backImg: backImg})
+                body: JSON.stringify({ name: name, desc: desc, category_id: category_id, price: price, mainImg: mainImg, frontImg: frontImg, backImg: backImg, is_one_size: is_one_size})
             };
             fetch('/products', requestOptions)
-            .then(async res => {
-                await UpdateProduct();
-            })
+            .then(UpdateProduct())
         } else{
             const requestOptions = {
                 method: 'PUT',
                 headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify({ name: name, desc: desc, category_id: category_id, price: price, mainImg: mainImg, frontImg: frontImg, backImg: backImg})
+                body: JSON.stringify({ name: name, desc: desc, category_id: category_id, price: price, mainImg: mainImg, frontImg: frontImg, backImg: backImg, is_one_size: is_one_size})
             };
-            fetch('/products/' + Info.id, requestOptions)
-            .then(async res => {
-                await UpdateProduct();
-            })
+            fetch('/products/' + id, requestOptions)
+            .then(UpdateProduct())
         }
     }
 
@@ -137,7 +143,6 @@ function Profile() {
         .then(async res => {
             await UpdateInfo();
         })
-
     }
 
     const HandleChange = (event) => {
@@ -164,7 +169,8 @@ function Profile() {
                 break;
         }
     }
-    console.log(Products)
+
+
     return (
         <Container isMobile={isMobile} className={useMediaQuery({ query: '(max-width: 750px)' })? "" : "Container"}>
                 {Info.is_admin? 
@@ -222,7 +228,7 @@ function Profile() {
                     }
                 </div>
                 :
-                <div style={{width: "100%"}}>
+                <div style={{width: "70%"}}>
                     {Info.is_admin? 
                         <div>
                             <div style={{display: "flex", justifyContent: "end", marginBottom: 20}}>
@@ -232,12 +238,16 @@ function Profile() {
                                     >
                                     Add item
                                 </Button>
-                                {isShowAddProductModal? <ProductAdminModal isNew={true} isShow={isShowAddProductModal} close={() => showAddProductModal(false)} func={FuncWithProduct}/>: null}
+                                {isShowAddProductModal? 
+                                        <ProductAdminModal categoryList={Category} isNew={true} isShow={isShowAddProductModal} close={() => showAddProductModal(false)} func={FuncWithProduct} />: null}
                             </div>
                             <div>
-                                {Products.map((el, i) => { return(
+                                {Products?.map((el, i) => { return(
                                     <ProductAdmin 
-                                        id = {el.id} img = {el.img} name = {el.name} category = {el.category} price = {el.price} Deleted = {() => DeleteProduct()}
+                                        el={el}
+                                        categoryList={Category}
+                                        Deleted = {DeleteProduct}
+                                        func={FuncWithProduct}
                                         key={i}
                                     />)
                                 })}

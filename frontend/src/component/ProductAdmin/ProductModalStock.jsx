@@ -47,7 +47,6 @@ s `
 function ProductModalCount(props){
     const {id, name, oneSize, total, s, m, l, xl} = props;
     const isMobile = useMediaQuery({ query: '(max-width: 750px)' });
-
     return(
         <Modal show={props.isShow}>
             <Content isMobile={isMobile}>
@@ -56,7 +55,7 @@ function ProductModalCount(props){
                     <P>Total count</P>
                     <Input text={total} placeholder={"number"}/>
                 </SizeContainer>
-                {oneSize? 
+                {!oneSize? 
                     <SizeContainer>
                         <SizeElContainer>
                             <P>S -</P>
@@ -88,10 +87,10 @@ function ProductModalCount(props){
                 }
                 <div style={{display: "flex", justifyContent: "space-around", width: "100%"}}>
                     <div style={{width: "100%", marginRight: 50}}>
-                    <Button func={() => props.close()} text="Save"/>
+                    <Button onClick={() => props.close()}>Save</Button>
                     </div>
                     <div style={{width: "100%"}}>
-                    <Button func={() => props.close()} text="Cancel"/>
+                    <Button onClick={() => props.close()}>Close</Button>
                     </div>
                 </div>
             </Content>

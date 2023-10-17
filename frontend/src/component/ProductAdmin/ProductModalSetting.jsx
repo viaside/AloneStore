@@ -43,14 +43,15 @@ const P = styled.p`
 `
 
 function ProductModalSetting(props){
-    const {id, name, desc, category, price, img, isNew, func} = props;
+    const {id, name, desc, category, categoryList, price, is_one_size, img, isNew, func} = props;
     const isMobile = useMediaQuery({ query: '(max-width: 750px)' });
     
-    const [Name, setName] = useState(null); 
-    const [Desc, setDesc] = useState(null); 
-    const [Category, setCategory] = useState(null); 
-    const [Price, setPrice] = useState(null); 
-    const [Img, setImg] = useState(null); 
+    const [Name, setName] = useState(name); 
+    const [Desc, setDesc] = useState(desc); 
+    const [Category, setCategory] = useState(category? category : 0); 
+    const [Price, setPrice] = useState(price); 
+    const [Img, setImg] = useState();   
+    const [isOneSize, setOneSize] = useState(is_one_size? is_one_size : false); 
 
     const HandleChange = (event) => {
         switch (event.target.name) {
@@ -69,6 +70,10 @@ function ProductModalSetting(props){
             case "Img":
                 setImg(event.target.value);
                 break;
+            case "Size":
+                setOneSize(!isOneSize);
+                console.log(isOneSize);
+                break;
             default:
                 break;
         }
@@ -83,16 +88,24 @@ function ProductModalSetting(props){
                     <Input name="Name" value={Name} onChange={HandleChange} text={name} placeholder={"name"}/>
                 </ElContainer>
                 <ElContainer>
-                    <P>Desctiption</P>
+                    <P>Description</P>
                     <Input name="Desc" value={Desc} onChange={HandleChange} text={desc} placeholder={"description"}/>
                 </ElContainer>
                 <ElContainer>
                     <P>Category</P>
-                    <Input name="Category" value={Category} onChange={HandleChange} text={category} placeholder={"Category"}/>
+                    <select defaultValue={0} name="" id="" value={category} style={{fontSize: 24, padding: "5px 20px"}} onChange={(e) => setCategory(e.target.value)}>
+                        {categoryList? categoryList.map((el, i) => {
+                            return <option value={el.id} key={i}>{el.name}</option>
+                        }): null}
+                    </select>
                 </ElContainer>
                 <ElContainer>
                     <P>Price</P>
                     <Input name="Price" value={Price} onChange={HandleChange} text={price} placeholder={"Price"}/>
+                </ElContainer>
+                <ElContainer>
+                    <P>Is one size?</P>
+                    <Input name="Size" onChange={HandleChange} type="checkbox" checked={isOneSize}/>
                 </ElContainer>
                 <ElContainer>
                     <P>Image</P>
@@ -104,7 +117,7 @@ function ProductModalSetting(props){
                 </ElContainer>
                 <div style={{display: "flex", justifyContent: "space-around", width: "100%"}}>
                     <div style={{width: "100%", marginRight: 50}}>
-                    <Button onClick={() => {props.close(); func(isNew, Name, Desc, Category, Price, Img)}}>Save</Button>
+                    <Button onClick={() => {props.close(); func(id, isNew, Name, Desc, Category, Price, Img?.main, Img?.Front, Img?.Back, isOneSize)}}>Save</Button>
                     </div>
                     <div style={{width: "100%"}}>
                     <Button onClick={() => props.close()}>Cancel</Button>

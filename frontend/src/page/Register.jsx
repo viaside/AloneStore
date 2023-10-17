@@ -100,7 +100,7 @@ function Register() {
             <Label>Address</Label>            
             <Input name = "Address" value={Address} onChange={(e) => HandleChange(e)} text={null} placeholder="Address"/>
             <br />
-            <Button text="Register" func={() => RegisterUser()}/>
+            <Button onClick={() => RegisterUser()}>Register</Button>
             <A href="../Login">Already have an account?</A>
         </Container>
     )
