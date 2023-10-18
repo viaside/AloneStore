@@ -1,6 +1,8 @@
 const express = require('express');
 const bodyParser = require('body-parser');
+const multer = require('multer');
 const app = express();
+const path = require('path')
 const port = process.env.PORT || 5000;
 
 const User = require('./queries/users');
@@ -13,12 +15,33 @@ const OrderDetail = require('./queries/order_detail');
 const Cart = require('./queries/cart');
 const CartDetail = require('./queries/cart_detail');
 
-app.use(bodyParser.json())
+global.__basedir = __dirname;
+app.use("/public", express.static(__dirname + '/public'))
 app.use(
   bodyParser.urlencoded({
     extended: true,
+    limit: '50mb,',
+    parameterLimit:50000
   })
 )
+app.use(express.json({limit: '50mb'}));
+app.use(express.urlencoded({limit: '50mb'}));
+app.use(bodyParser.json({limit: '50mb'}));
+app.use(bodyParser.urlencoded({limit: '50mb', extended: true, parameterLimit:50000}));
+
+
+var storage = multer.diskStorage({
+  destination: (req, file, callBack) => {
+      callBack(null, './public/images/')     // './public/images/' directory name where save the file
+  },
+  filename: (req, file, callBack) => {
+      callBack(null, file.fieldname + '-' + Date.now() + path.extname(file.originalname))
+  }
+})
+
+var upload = multer({
+  storage: storage
+});
 
 app.get('/userLogin/:login&:password', User.login)
 app.get('/users', User.getUser)
@@ -29,8 +52,12 @@ app.delete('/users/:id', User.deleteUser)
 
 app.get('/products', Products.getProduct)
 app.get('/products/:id', Products.getProductById)
-app.post('/products', Products.createProduct)
-app.put('/products/:id', Products.updateProduct)
+app.post('/products', upload.single('file'), (req, res) => {
+  let data = req.body;
+  let files = req.file;
+    Products.createProduct(data.name, data.desc, data.category, data.price, files.filename, null, null, data.isOneSize)
+})
+// app.put('/products/:id', upload.single("file"), Products.updateProduct)
 app.delete('/products/:id', Products.deleteProduct)
 
 app.get('/quantity', Quantity.getQuantityProduct)

@@ -99,7 +99,6 @@ function Profile() {
         .then(async (data) => {
             setCategory(data)
         })
-        console.log("update");
     }
 
     function DeleteProduct(id){
@@ -114,23 +113,44 @@ function Profile() {
     }
 
     function FuncWithProduct(id, isNew, name, desc, category_id, price, mainImg, frontImg, backImg, is_one_size){
+        const formData = new FormData();
+        formData.append("file", mainImg.data);
+        formData.append("fileName", name);
+        formData.append("name", name);
+        formData.append("desc", desc);
+        formData.append("category", category_id);
+        formData.append("price", price);
+        formData.append("isOneSize", is_one_size);
+        
         if(isNew){
-            const requestOptions = {
+                const requestOptions = {
                 method: 'POST',
-                headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify({ name: name, desc: desc, category_id: category_id, price: price, mainImg: mainImg, frontImg: frontImg, backImg: backImg, is_one_size: is_one_size})
+                body: formData
+                // body: JSON.stringify({ name: name, desc: desc, category_id: category_id, price: price, mainImg: Main, frontImg: frontImg, backImg: backImg, is_one_size: is_one_size})
             };
             fetch('/products', requestOptions)
             .then(UpdateProduct())
         } else{
-            const requestOptions = {
-                method: 'PUT',
-                headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify({ name: name, desc: desc, category_id: category_id, price: price, mainImg: mainImg, frontImg: frontImg, backImg: backImg, is_one_size: is_one_size})
-            };
-            fetch('/products/' + id, requestOptions)
-            .then(UpdateProduct())
+            // const requestOptions = {
+            //     method: 'PUT',
+            //     headers: { 'Content-Type': 'application/json' },
+            //     body: formData
+            //     // body: JSON.stringify({ name: name, desc: desc, category_id: category_id, price: price, mainImg: formData, frontImg: frontImg, backImg: backImg, is_one_size: is_one_size})
+            // };
+            // fetch('/products/' + id, requestOptions)
+            // .then(UpdateProduct())
         }
+    }
+
+    function ChangeQuantity(productId, total, s, m, l, xl) {
+        const requestOptions = {
+            method: 'PUT',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({product_id: productId, quantity_total: total, quantity_s: s, quantity_m: m, quantity_l: l, quantity_xl: xl})
+        };
+        fetch('/quantity/' + productId, requestOptions)
+        .then(UpdateProduct());
+        UpdateProduct();
     }
 
     function SaveChangesUser(){
@@ -239,13 +259,23 @@ function Profile() {
                                     Add item
                                 </Button>
                                 {isShowAddProductModal? 
-                                        <ProductAdminModal categoryList={Category} isNew={true} isShow={isShowAddProductModal} close={() => showAddProductModal(false)} func={FuncWithProduct} />: null}
+                                    <ProductAdminModal 
+                                        categoryList={Category} 
+                                        isNew={true} 
+                                        isShow={isShowAddProductModal} 
+                                        close={() => showAddProductModal(false)} 
+                                        func={FuncWithProduct} 
+                                        img = {{main_img: null, front_img: null, back_img: null}} 
+                                    />
+                                    : null
+                                }
                             </div>
                             <div>
                                 {Products?.map((el, i) => { return(
                                     <ProductAdmin 
                                         el={el}
                                         categoryList={Category}
+                                        ChangeQuantity={ChangeQuantity}
                                         Deleted = {DeleteProduct}
                                         func={FuncWithProduct}
                                         key={i}

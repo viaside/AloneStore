@@ -27,10 +27,10 @@ const P = styled.p`
 
 function ProductCartDesktop(props) {
     const {id, img, name, price} = props.props;
-
+    console.log(img)
     return(
         <ProductCart to={`${name}`} state={name} >
-            <Img src={img}/>
+            <Img src={'data:image/jpg;base64,' + btoa(img)}/>
             <P>{name}</P>
             <P>{price}$</P>
         </ProductCart>

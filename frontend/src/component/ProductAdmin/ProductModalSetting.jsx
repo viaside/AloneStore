@@ -50,46 +50,19 @@ function ProductModalSetting(props){
     const [Desc, setDesc] = useState(desc); 
     const [Category, setCategory] = useState(category? category : 0); 
     const [Price, setPrice] = useState(price); 
-    const [Img, setImg] = useState();   
+    const [Img, setImg] = useState(img);   
     const [isOneSize, setOneSize] = useState(is_one_size? is_one_size : false); 
-
-    const HandleChange = (event) => {
-        switch (event.target.name) {
-            case "Name":
-                setName(event.target.value);
-                break;
-            case "Desc": 
-                setDesc(event.target.value);
-                break;
-            case "Category": 
-                setCategory(event.target.value);                   
-                break;
-            case "Price": 
-                setPrice(event.target.value);
-                break;
-            case "Img":
-                setImg(event.target.value);
-                break;
-            case "Size":
-                setOneSize(!isOneSize);
-                console.log(isOneSize);
-                break;
-            default:
-                break;
-        }
-    }
-    
     return(
         <Modal show={props.isShow}>
             <Content isMobile={isMobile}>
                 <h1>{name}</h1>
                 <ElContainer>
                     <P>Name</P>
-                    <Input name="Name" value={Name} onChange={HandleChange} text={name} placeholder={"name"}/>
+                    <Input name="Name" value={Name} onChange={(e) => setName(e.target.value)} text={name} placeholder={"name"}/>
                 </ElContainer>
                 <ElContainer>
                     <P>Description</P>
-                    <Input name="Desc" value={Desc} onChange={HandleChange} text={desc} placeholder={"description"}/>
+                    <Input name="Desc" value={Desc} onChange={(e) => setDesc(e.target.value)} text={desc} placeholder={"description"}/>
                 </ElContainer>
                 <ElContainer>
                     <P>Category</P>
@@ -101,23 +74,23 @@ function ProductModalSetting(props){
                 </ElContainer>
                 <ElContainer>
                     <P>Price</P>
-                    <Input name="Price" value={Price} onChange={HandleChange} text={price} placeholder={"Price"}/>
+                    <Input name="Price" value={Price} onChange={(e) => setPrice(e.target.value)} text={price} placeholder={"Price"}/>
                 </ElContainer>
                 <ElContainer>
-                    <P>Is one size?</P>
-                    <Input name="Size" onChange={HandleChange} type="checkbox" checked={isOneSize}/>
+                    <P>Is one size?
+                    <Input name="Size" onChange={(e) => setOneSize(e.target.value)} type="checkbox" checked={isOneSize}/></P>
                 </ElContainer>
                 <ElContainer>
                     <P>Image</P>
-                    <div style={{display: "flex", justifyContent: "space-around"}}>
-                        <InputImage text={img?.Main} placeholder={"Main"}/>
-                        <InputImage text={img?.Front} placeholder={"Front"}/>
-                        <InputImage text={img?.Back} placeholder={"Back"}/>
+                    <div style={{display: "flex"}}>
+                        <InputImage name="main_img" type="file" accept=".png,.jpg,.jpeg,.gif"  src={Img.main_img? Img.main_img : null} onChange={setImg } Img={Img} alt={"main"}/>
+                        <InputImage name="front_img" type="file" accept=".png,.jpg,.jpeg,.gif" src={Img.front_img? Img.front_img : null} onChange={setImg   } Img={Img} alt={"front"}/>
+                        <InputImage name="back_img" type="file" accept=".png,.jpg,.jpeg,.gif"  src={Img.back_img? Img.back_img : null} onChange={setImg } Img={Img} alt={"back"}/>
                     </div>
                 </ElContainer>
                 <div style={{display: "flex", justifyContent: "space-around", width: "100%"}}>
                     <div style={{width: "100%", marginRight: 50}}>
-                    <Button onClick={() => {props.close(); func(id, isNew, Name, Desc, Category, Price, Img?.main, Img?.Front, Img?.Back, isOneSize)}}>Save</Button>
+                    <Button onClick={() => {props.close(); func(id, isNew, Name, Desc, Category, Price, Img?.main_img, Img?.front_img, Img?.back_img, isOneSize)}}>Save</Button>
                     </div>
                     <div style={{width: "100%"}}>
                     <Button onClick={() => props.close()}>Cancel</Button>

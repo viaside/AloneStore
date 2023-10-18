@@ -1,53 +1,8 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { useMediaQuery } from "react-responsive";
 import styled from "styled-components";
 
 import ProductCart from "../component/ProductCart/ProductCart";
-
-let Products = [
-        {
-            id: 1,
-            Img: '1',
-            Name: "Hoddie 2",
-            Price: "400",
-            Category: "Hoodie",
-        },
-        {
-            id: 2,
-            Img: '1',
-            Name: "T-Shirt 1",
-            Price: "400",
-            Category: "T-Shirt",
-        },
-        {
-            id: 3,
-            Img: '1',
-            Name: "Hoodie 1",
-            Price: "400",
-            Category: "Hoodie",
-        },
-        {
-            id: 4,
-            Img: '1',
-            Name: "Pants",
-            Price: "400",
-            Category: "Pants",
-        },
-        {
-            id: 5,
-            Img: '1',
-            Name: "Cap ",
-            Price: "400",
-            Category: "Cap",
-        },
-        {
-            id: 6,
-            Img: '1',
-            Name: "T-Shirt 2",
-            Price: "400",
-            Category: "T-Shirt",
-        }
-]; 
 
 const Container = styled.div`
     display: flex;
@@ -82,8 +37,22 @@ const CalalogList = styled.div`
 
 function Catalog() {
     const [NowFilter, SetFilter] = useState("All");
+    const [Data, setData] = useState([]);
     const isMobile = useMediaQuery({ query: '(max-width: 750px)' });
     
+    useEffect(() => {UpdateCatalog()}, []);
+
+    function UpdateCatalog(){
+        fetch(`/products`, {
+            method: "GET",
+        })
+        .then((response) => response.json())
+        .then(async (data) => {
+            setData(data);
+        })
+        .catch((error) => console.log(error));
+    }
+
     return (
         <Container isMobile={isMobile} className={useMediaQuery({ query: '(max-width: 750px)' })? "MobileContainer" : "Container"}>
             <Filter isMobile={isMobile}>
@@ -94,10 +63,10 @@ function Catalog() {
                 <FilterButton active={ NowFilter === "Cap" ? true : false} onClick={() => SetFilter("Cap")}>Cap</FilterButton>
             </Filter>
             <CalalogList isMobile={isMobile}>
-                {Products.map((el, i) => {
+                {Data.map((el, i) => {
                     if(NowFilter === "All"? true : el.Category === NowFilter){
                         return(
-                            <ProductCart id={i} img={el.Img} name={el.Name} price={el.Price} onClick={() => window.location.pathname = `/${el.id}`}/>
+                            <ProductCart id={el.product_id} img={el.main_img} name={el.name} price={el.price} onClick={() => window.location.pathname = `/${el.id}`}/>
                         )
                     }
                 })}

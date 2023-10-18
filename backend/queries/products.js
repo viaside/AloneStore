@@ -1,5 +1,8 @@
 const pool = require('./queries').pool;
 const qunatity = require('./quantity_product');
+const fs = require("fs");
+
+const Image = require("../models/models");
 
 const getProduct = (request, response) => {
     pool.query('SELECT * FROM public.products INNER JOIN public.quantity_product AS Sod ON public.products.id = Sod.product_id ORDER BY public.products.id ASC', (error, results) => {
@@ -21,9 +24,7 @@ const getProductById = (request, response) => {
     })
 }
 
-const createProduct = (request, response) => {
-    const {name, desc, category_id, price, mainImg, frontImg, backImg, is_one_size} = request.body
-
+const createProduct = (name, desc, category_id, price, mainImg, frontImg, backImg, is_one_size) => {
     pool.query('INSERT INTO public.products (name, "desc", category_id, price, main_img, front_img, back_img) VALUES ($1, $2, $3, $4, $5, $6, $7) RETURNING id', 
     [name, desc, category_id, price, mainImg, frontImg, backImg], (error, results, fields) => {
         if (error) {
@@ -35,7 +36,6 @@ const createProduct = (request, response) => {
                 throw error
             }
         })
-        response.status(201).send(`Products added with ID: ${ results.rows[0].id}`)
     })
 }
 
@@ -49,7 +49,7 @@ const updateProduct = (request, response) => {
         (error, results) => {
             if (error) {
                 throw error
-            }
+            }   
             pool.query('UPDATE public.quantity_product SET is_one_size = $1 WHERE product_id = $2', 
             [is_one_size, id], (error, results) => {
                 if (error) {

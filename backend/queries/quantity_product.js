@@ -33,17 +33,17 @@ const createQuantityProduct = (request, response) => {
 }
 
 const updateQuantityProduct = (request, response) => {
-    const id = parseInt(request.params.id)
-    const {product_id, is_one_size, quantity_total, quantity_s, quantity_m, quantity_l, quantity_xl} = request.body
+    const product_id = parseInt(request.params.id)
+    const {quantity_total, quantity_s, quantity_m, quantity_l, quantity_xl} = request.body
 
     pool.query(
-        'UPDATE public.quantity_product SET product_id = $1, is_one_size = $2, quantity_total = $3, quantity_s = $4, quantity_m = $5, quantity_l = $6, quantity_xl = $7 WHERE id = $8',
-        [product_id, is_one_size, quantity_total, quantity_s, quantity_m, quantity_l, quantity_xl],
+        'UPDATE public.quantity_product SET quantity_total = $1, quantity_s = $2, quantity_m = $3, quantity_l = $4, quantity_xl = $5 WHERE product_id = $6',
+        [quantity_total, quantity_s, quantity_m, quantity_l, quantity_xl, product_id],
         (error, results) => {
             if (error) {
                 throw error
             }
-            response.status(200).send(`quantity_product modified with ID: ${id}`)
+            response.status(200).send(`quantity_product modified with ID: ${product_id}`)
         }
     )
 }
