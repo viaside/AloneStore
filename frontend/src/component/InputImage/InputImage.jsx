@@ -47,7 +47,7 @@ function InputImage({name, type, accept, onChange, Img, alt, src}) {
     }
     return(
         <div style={{display: "flex", flexDirection: "column", height: 200, width: 200, justifyContent: "space-between"}}>
-            <img src={NowImg?.preview} alt="" width={"80%"}/>
+            <img src={NowImg?.preview? NowImg.preview : `${src}`} alt="" width={"80%"} height={"80%"}/>
             <InputCustom name={name} type={type} accept={accept} src={src} onChange={e => HandleChange(e)} alt={alt}/>
         </div>
     )

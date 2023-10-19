@@ -31,9 +31,7 @@ const P = styled.p`
 `
 
 
-function Counter(props) {
-    const {DefaultCount} = props;
-    const [Count, SetCount] = useState(DefaultCount? DefaultCount : 1);
+function Counter({DefaultCount, Count, SetCount}) {
 
     return (
         <CounterCustom>

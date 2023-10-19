@@ -20,46 +20,54 @@ const Button = styled.button`
 `
 
 function SizeSelector(props) {
-    const {XS, S, M, L, XL} = props;
-    const [arr, changeArr]  = useState([false, false, false, false, false]);
-
+    const {S, M, L, XL, setSize} = props;
+    const [arr, changeArr]  = useState([false, false, false, false]);
+    console.log(arr)
     return(
         <Container>
             <Button onClick={() => 
-            changeArr(arr.map((x, i) => { 
-                if(i === 0){
-                    return !x 
-                } }))
+                changeArr(arr.map((x, i) => {
+                    console.log(i)
+                    setSize("S"); 
+                    if(S){
+                        if(i === 0){
+                            return !x 
+                        }    
+                    }}))
                 } 
-                active = {arr[0]} available = {XS}>XS</Button>
+                active = {arr[0]}  available = {S}>S</Button>
+            <Button onClick={() => 
+                    {
+                    setSize("M");
+                    changeArr(arr.map((x, i) => { 
+                        if(M){
+                            if(i === 1){
+                                return !x 
+                            }    
+                    }}));
+                    } 
+                }
+                active = {arr[1]}  available = {M}>M</Button>
             <Button onClick={() => 
                 changeArr(arr.map((x, i) => { 
-                    if(i === 1){
-                        return !x 
-                    } }))
+                    setSize("L"); 
+                    if(L){
+                        if(i === 2){
+                            return !x 
+                        }    
+                    }}))
                 } 
-                active = {arr[1]}  available = {S}>S</Button>
-            <Button onClick={() => 
-              changeArr(arr.map((x, i) => { 
-                    if(i === 2){
-                        return !x 
-                    } }))
-                } 
-                active = {arr[2]}  available = {M}>M</Button>
+                active = {arr[2]}  available = {L}>L</Button>
             <Button onClick={() => 
                 changeArr(arr.map((x, i) => { 
-                    if(i === 3){
-                        return !x 
-                    } }))
+                    setSize("XL"); 
+                    if(XL){
+                        if(i === 3){
+                            return !x 
+                        }    
+                    }}))
                 } 
-                active = {arr[3]}  available = {L}>L</Button>
-            <Button onClick={() => 
-                changeArr(arr.map((x, i) => { 
-                    if(i === 4){
-                        return !x 
-                    } }))
-                } 
-                active = {arr[4]} available = {XL}>XL</Button>
+                active = {arr[3]} available = {XL}>XL</Button>
         </Container>
     )
 }

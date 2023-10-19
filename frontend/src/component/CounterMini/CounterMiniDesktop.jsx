@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import styled from "styled-components";
 
 const CounterCustom = styled.div`
@@ -28,14 +28,25 @@ const P = styled.p`
 
 
 function CounterMiniDesktop(props) {
-    const {DefaultCount} = props;
-    const [Count, SetCount] = useState(DefaultCount? DefaultCount : 1);
+    const {id, DefaultCount, UpdateQuantity} = props.props;
+    const [Count, SetCount] = useState(1);
+    useEffect(()=>SetCount(DefaultCount), [props])
 
+    function ChangeCountPlus(){
+        SetCount(Count+1);
+        UpdateQuantity(id, Count+1);
+    }
+    function ChangeCountMinus(){
+        if(!(Count-1  === 0)){
+            SetCount(Count-1);
+            UpdateQuantity(id, Count-1);
+        }  
+    }
     return (
         <CounterCustom>
-            <Button onClick={() => SetCount(Count-1  === 0? 1 : Count - 1)}>-</Button>
+            <Button onClick={() => ChangeCountMinus()}>-</Button>
             <P>{Count}</P>
-            <Button onClick={() => SetCount(Count+1)}>+</Button>  
+            <Button onClick={() => ChangeCountPlus()}>+</Button>  
         </CounterCustom>
     )
 }

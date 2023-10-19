@@ -78,14 +78,14 @@ function ProductModalSetting(props){
                 </ElContainer>
                 <ElContainer>
                     <P>Is one size?
-                    <Input name="Size" onChange={(e) => setOneSize(e.target.value)} type="checkbox" checked={isOneSize}/></P>
+                    <Input name="Size" onChange={(e) => setOneSize(!isOneSize)} type="checkbox" checked={isOneSize}/></P>
                 </ElContainer>
                 <ElContainer>
                     <P>Image</P>
                     <div style={{display: "flex"}}>
-                        <InputImage name="main_img" type="file" accept=".png,.jpg,.jpeg,.gif"  src={Img.main_img? Img.main_img : null} onChange={setImg } Img={Img} alt={"main"}/>
-                        <InputImage name="front_img" type="file" accept=".png,.jpg,.jpeg,.gif" src={Img.front_img? Img.front_img : null} onChange={setImg   } Img={Img} alt={"front"}/>
-                        <InputImage name="back_img" type="file" accept=".png,.jpg,.jpeg,.gif"  src={Img.back_img? Img.back_img : null} onChange={setImg } Img={Img} alt={"back"}/>
+                        <InputImage name="main_img" type="file" accept=".png,.jpg,.jpeg,.gif"  src={Img?.main_img} onChange={setImg } Img={Img} alt={"main"}/>
+                        <InputImage name="front_img" type="file" accept=".png,.jpg,.jpeg,.gif" src={Img?.front_img} onChange={setImg   } Img={Img} alt={"front"}/>
+                        <InputImage name="back_img" type="file" accept=".png,.jpg,.jpeg,.gif"  src={Img?.back_img} onChange={setImg } Img={Img} alt={"back"}/>
                     </div>
                 </ElContainer>
                 <div style={{display: "flex", justifyContent: "space-around", width: "100%"}}>

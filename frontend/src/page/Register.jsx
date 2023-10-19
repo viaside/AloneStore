@@ -51,9 +51,9 @@ function Register() {
                 })    
             } else{
                 localStorage.setItem("isLogined", true);
+                 window.location.href = '/Login';
                 res.json().then((e) => {
                     localStorage.setItem("userId", e);
-                    console.log(e);
                 })    
             }
         })

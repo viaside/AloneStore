@@ -114,31 +114,33 @@ function Profile() {
 
     function FuncWithProduct(id, isNew, name, desc, category_id, price, mainImg, frontImg, backImg, is_one_size){
         const formData = new FormData();
-        formData.append("file", mainImg.data);
+        let MainImg = new File([mainImg?.data], `${name.replace(" ", "")}_main.jpg`);
+        let FrontImg = new File([frontImg?.data], `${name.replace(" ", "")}_front.jpg`);
+        let BackImg = new File([backImg?.data], `${name.replace(" ", "")}_back.jpg`);
+        console.log(frontImg)
+        formData.append("file", mainImg?.data? MainImg : mainImg);
+        formData.append("file", frontImg?.data? FrontImg : frontImg);
+        formData.append("file", backImg?.data? BackImg : backImg);
         formData.append("fileName", name);
         formData.append("name", name);
         formData.append("desc", desc);
         formData.append("category", category_id);
         formData.append("price", price);
         formData.append("isOneSize", is_one_size);
-        
         if(isNew){
                 const requestOptions = {
                 method: 'POST',
                 body: formData
-                // body: JSON.stringify({ name: name, desc: desc, category_id: category_id, price: price, mainImg: Main, frontImg: frontImg, backImg: backImg, is_one_size: is_one_size})
             };
             fetch('/products', requestOptions)
             .then(UpdateProduct())
         } else{
-            // const requestOptions = {
-            //     method: 'PUT',
-            //     headers: { 'Content-Type': 'application/json' },
-            //     body: formData
-            //     // body: JSON.stringify({ name: name, desc: desc, category_id: category_id, price: price, mainImg: formData, frontImg: frontImg, backImg: backImg, is_one_size: is_one_size})
-            // };
-            // fetch('/products/' + id, requestOptions)
-            // .then(UpdateProduct())
+            const requestOptions = {
+                method: 'PUT',
+                body: formData
+            };
+            fetch('/products/' + id, requestOptions)
+            .then(UpdateProduct())
         }
     }
 
@@ -199,7 +201,12 @@ function Profile() {
                         <FilterButton active={ NowPage === "Orders" ? true : false} onClick={() => SetPage("Orders")}>All Orders</FilterButton>
                         <FilterButton active={ NowPage === "Catalog" ? true : false} onClick={() => {SetPage("Catalog"); UpdateProduct()}}>Catalog item</FilterButton>
                         <div style={{width: "40%"}}>
-                            <Button onClick={() => {localStorage.setItem("isLogined", false); window.location.href = "/"}}>Log out</Button>
+                            <Button onClick={() => {
+                                localStorage.setItem("isLogined", false); 
+                                localStorage.setItem("userId", null); 
+                                localStorage.setItem("cartId", null); 
+                                window.location.href = "/"
+                            }}>Log out</Button>
                         </div>
                     </Filter>
                     :

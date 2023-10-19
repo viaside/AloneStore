@@ -19,8 +19,8 @@ const ProductCart = styled.div`
 `
 
 const Img = styled.img`
-    width: 45px;
-    height: 45px;
+    width: 70px;
+    height: 70px;
 `
 
 const P = styled.p`
@@ -58,7 +58,7 @@ function ProductAdminDesktop(props) {
     return(
         <ProductCart>
             <P>№{el?.product_id}</P>
-            <Img src="/public/images/file-1697658274065.jpg"/>
+            <Img src={el?.main_img}/>
             <P>{el?.name}</P>
             <P>{categoryList ? categoryList[el?.category_id]?.name : null}</P>
             <P>{el?.price}$</P>

@@ -46,13 +46,18 @@ const getUserByLogin = (request, response) => {
 const createUser = (request, response) => {
     const {login, password, phone_number, email, full_name, address, is_admin} = request.body
 
-    pool.query('INSERT INTO public."user" (login, password, phone_number, email, full_name, address, is_admin) VALUES ($1, $2, $3, $4, $5, $6, $7)', 
-    [login, password, phone_number, email, full_name, address, is_admin], (error, results) => {
+    pool.query('INSERT INTO public."user" (login, password, phone_number, email, full_name, address, is_admin) VALUES ($1, $2, $3, $4, $5, $6, $7) RETURNING id', 
+    [login, password, phone_number, email, full_name, address, false], (error, results) => {
         if (error) {
-            response.status(400).json({status: 400, message: error})
+            throw error
         } else{
-            response.status(201).send(login)
-            console.log(response.insertId)
+            pool.query('INSERT INTO public.cart (user_id, total_price) VALUES ($1, $2)', 
+            [results.rows[0].id, 0], (error, results) => {
+                if (error) {
+                    throw error
+                }
+            })
+            response.status(201).send("SUCCESS")
         }
     })
 }

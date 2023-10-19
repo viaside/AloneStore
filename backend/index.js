@@ -32,10 +32,10 @@ app.use(bodyParser.urlencoded({limit: '50mb', extended: true, parameterLimit:500
 
 var storage = multer.diskStorage({
   destination: (req, file, callBack) => {
-      callBack(null, './public/images/')     // './public/images/' directory name where save the file
+    callBack(null, './public/images/')     // './public/images/' directory name where save the file
   },
   filename: (req, file, callBack) => {
-      callBack(null, file.fieldname + '-' + Date.now() + path.extname(file.originalname))
+    callBack(null, file.originalname)
   }
 })
 
@@ -52,12 +52,26 @@ app.delete('/users/:id', User.deleteUser)
 
 app.get('/products', Products.getProduct)
 app.get('/products/:id', Products.getProductById)
-app.post('/products', upload.single('file'), (req, res) => {
+app.post('/products', upload.array('file'), (req, res) => {
   let data = req.body;
-  let files = req.file;
-    Products.createProduct(data.name, data.desc, data.category, data.price, files.filename, null, null, data.isOneSize)
+  let MainImg = `/public/images/${data.name.replace(" ", "")}_main.jpg`;
+  let FrontImg = `/public/images/${data.name.replace(" ", "")}_front.jpg`;
+  let BackImg = `/public/images/${data.name.replace(" ", "")}_back.jpg`;
+
+  Products.createProduct(
+    data.name, data.desc, data.category, data.price, MainImg, FrontImg, BackImg, data.isOneSize
+  )
 })
-// app.put('/products/:id', upload.single("file"), Products.updateProduct)
+app.put('/products/:id', upload.array('file',), (req, res) => {
+  let data = req.body;
+  let MainImg = `/public/images/${data.name.replace(" ", "")}_main.jpg`;
+  let FrontImg = `/public/images/${data.name.replace(" ", "")}_front.jpg`;
+  let BackImg = `/public/images/${data.name.replace(" ", "")}_back.jpg`;
+
+  Products.updateProduct(
+    parseInt(req.params.id),data.name, data.desc, data.category, data.price, MainImg, FrontImg, BackImg, data.isOneSize
+  )
+})
 app.delete('/products/:id', Products.deleteProduct)
 
 app.get('/quantity', Quantity.getQuantityProduct)
@@ -98,6 +112,8 @@ app.delete('/cart/:id', Cart.deleteCart)
 
 app.get('/cartDetail', CartDetail.getCartDetail)
 app.get('/cartDetail/:id', CartDetail.getCartDetailById)
+app.get('/cartDetailUserId/:id', CartDetail.getCartIdByUserId)
+app.put('/cartDetailQuantity/:id', CartDetail.updateQuantity)
 app.post('/cartDetail', CartDetail.createCartDetail)
 app.put('/cartDetail/:id', CartDetail.updateCartDetail)
 app.delete('/cartDetail/:id', CartDetail.deleteCartDetail)

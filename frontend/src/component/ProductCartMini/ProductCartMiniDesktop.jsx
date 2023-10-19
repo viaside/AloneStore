@@ -29,7 +29,7 @@ function ProductCartMiniDesktop(props) {
 
     return(
         <ProductCart to={`../Catalog/${name}`} state={id} onClick={() => ScrollToTop()}>
-            <Img src={img}/>
+            <Img src={img} alt="s"/>
             <P>{name}</P>
             <P>{price}$</P>
         </ProductCart>

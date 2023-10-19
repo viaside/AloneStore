@@ -41,21 +41,22 @@ const DeleteButton = styled(DeleteIcon)`
 `
 
 function CartItemDesktop(props) {
-    const {id, img, name, price, count, size, Deleted} = props.props;
-
+    const {id, img, name, price, count, size, Deleted, UpdateQuantity} = props.props;
     return(
         <ProductCart>
             <FlexDiv>
                 <Img src={img}/>
                 <div>
                     <P>{name}</P>
+                    {size !== null? 
                     <P style={{fontSize: "var(--font-small)"}}>Size: {size}</P>
+                    : null}
                 </div>
             </FlexDiv>
             <FlexDiv>
-                <CounterMini isMobile={false} DefaultCount={count}/>
+                <CounterMini isMobile={false} DefaultCount={count} id={id} UpdateQuantity={UpdateQuantity}/>
                 <P>{price}$</P>
-                <DeleteButton onClick={() => Deleted()} />
+                <DeleteButton onClick={() => Deleted(id)} />
             </FlexDiv>
         </ProductCart>
     )

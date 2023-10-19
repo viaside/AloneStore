@@ -16,7 +16,15 @@ const getProduct = (request, response) => {
 const getProductById = (request, response) => {
     const id = parseInt(request.params.id)
 
-    pool.query('SELECT * FROM public.products WHERE id = $1', [id], (error, results) => {
+    pool.query(
+        `SELECT 
+            *,product.name as name, product.id as id, product.desc as desc, product.price as price,
+            category.name as category 
+            FROM public.products as product
+            INNER JOIN public.quantity_product AS Sod ON product.id = Sod.product_id 
+            INNER JOIN public.category AS category ON product.category_id = category.id 
+            WHERE product.id = $1`
+        , [id], (error, results) => {
         if (error) {
             throw error
         }
@@ -31,7 +39,7 @@ const createProduct = (name, desc, category_id, price, mainImg, frontImg, backIm
             throw error
         }
         pool.query('INSERT INTO public.quantity_product (product_id, is_one_size, quantity_total, quantity_s, quantity_m, quantity_l, quantity_xl) VALUES ($1, $2, $3, $4, $5, $6, $7)', 
-        [results.rows[0].id, is_one_size, null, null, null, null, null], (error, results) => {
+        [results.rows[0].id, is_one_size, 0, 0, 0, 0, 0], (error, results) => {
             if (error) {
                 throw error
             }
@@ -39,12 +47,8 @@ const createProduct = (name, desc, category_id, price, mainImg, frontImg, backIm
     })
 }
 
-const updateProduct = (request, response) => {
-    const id = parseInt(request.params.id)
-    const { name, desc, category_id, price, mainImg, frontImg, backImg, is_one_size } = request.body
-
-    pool.query(
-        'UPDATE public.products SET name = $1, "desc" = $2, category_id = $3, price = $4, main_img = $5, front_img = $6, back_img = $7 WHERE id = $8',
+const updateProduct = (id, name, desc, category_id, price, mainImg, frontImg, backImg, is_one_size) => {
+    pool.query('UPDATE public.products SET name = $1, "desc" = $2, category_id = $3, price = $4, main_img = $5, front_img = $6, back_img = $7 WHERE id = $8',
         [name, desc, category_id, parseInt(price), mainImg, frontImg, backImg, id],
         (error, results) => {
             if (error) {
@@ -56,7 +60,6 @@ const updateProduct = (request, response) => {
                     throw error
                 }
             })
-            response.status(200).send(`Products modified with ID: ${id}`)
         }
     )
 }

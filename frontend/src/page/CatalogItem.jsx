@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import { useMediaQuery } from "react-responsive";
 import { useLocation, useParams } from "react-router-dom";
 import styled from "styled-components";
@@ -16,8 +16,9 @@ const ProductCart = styled.div`
 `
 
 const Other = styled.div`
+    max-width: 100%;
     display: ${props => props.isMobile? "grid" : "flex"};
-    grid-template-columns: 1fr 1fr;
+    grid-template-columns: 1fr;
     justify-content: space-evenly;
     align-items: ${props => props.isMobile? "center" : "flex-end"};
 `
@@ -33,7 +34,7 @@ const ProductCartInfo = styled.div`
 const ProductCartFunc = styled.div`
     display: flex;
     justify-content: space-between;
-    width: 65%;
+    width: 100%;
 `
 
 const TextSmall = styled.p`
@@ -58,6 +59,7 @@ const TextBig = styled.p`
 const VerticalText = styled.p`
     position: ${props => props.isMobile? "absolute" : "relative"};
     left: 0;
+    bottom: ${props => props.isMobile? "-100px" : ""};
     height: 0px;
     width: 0px;
     font-size: var(--font-big);
@@ -74,42 +76,85 @@ const VerticalText = styled.p`
 function CatalogItem() {
     const params = useParams();
     const { state } = useLocation();
+    const [Data, setData] = useState([]);
+    const [Count, setCount] = useState(1);
+    const [Size, setSize] = useState(null);
+    const [OtherData, setOtherData] = useState([]);
     const isMobile = useMediaQuery({ query: '(max-width: 750px)' });
+    useEffect(() => {UpdateCatalog(); UpdateOther()}, []);
+    useEffect(() => {UpdateCatalog(); UpdateOther()}, [state]);
 
+    function UpdateCatalog(){
+        fetch(`/products/${state}`, {
+            method: "GET",
+        })
+        .then((response) => response.json())
+        .then(async (data) => {
+            setData(data[0]);
+        })
+        .catch((error) => console.log(error));
+    }
+
+    function UpdateOther(){
+        fetch(`/products/`, {
+            method: "GET",
+        })
+        .then((response) => response.json())
+        .then(async (data) => {
+            setOtherData(data);
+        })
+        .catch((error) => console.log(error));
+    }
+
+    function AddCart() {
+        fetch('/cartDetailUserId/'+ localStorage.getItem("userId"),{method:'GET'})
+        .then((response) => response.json())
+        .then(result => {
+            const CartId = result[0].id;
+            localStorage.setItem("cartId", CartId);
+            const requestOptions = {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({cart_id: CartId, product_id: Data.id, quantity: Count, size: Size, total_price: Data.price*Count})
+            };
+            fetch(`/cartDetail`, requestOptions)
+            .then(res => {
+                if(res.status >= 400){
+                    res?.json().then((e) => {
+                        alert(e.message)
+                    })    
+                } else{
+                    alert("Add to cart")
+                }
+            })
+        })
+    }
+    
     return (
-        <div className={useMediaQuery({ query: '(max-width: 750px)' })? "" : "Container"}>
+        <div className={useMediaQuery({ query: '(max-width: 750px)' })? "MobileContainer" : "Container"}>
             <ProductCart isMobile={isMobile}>
-                <ProductSlider isMobile={isMobile} img={[0,1,2,3,4]}/>
+                <ProductSlider isMobile={isMobile} img={[Data.main_img, Data.front_img, Data.back_img]}/>
                 <ProductCartInfo>
-                    <TextBig>{params.name}</TextBig>
-                    <TextMedium style={{color: "var(--gray-text)"}}>Category</TextMedium>
-                    <TextBig>400$</TextBig>
+                    <TextBig>{Data.name}</TextBig>
+                    <TextMedium style={{color: "var(--gray-text)"}}>{Data.category}</TextMedium>
+                    <TextBig>{Data.price}$</TextBig>
                     <br />
-                    <SizeSelector XS={0} S={0} M={1} L={1} XL={0}/>
+                    {!Data.is_one_size? 
+                    <SizeSelector setSize={setSize} S={Data.quantity_s !== 0} M={Data.quantity_m !== 0} L={Data.quantity_l !== 0} XL={Data.quantity_xl !== 0}/>
+                    : <TextSmall style={{color: "var(--gray-text)"}}>Total quantity: {Data.quantity_total}</TextSmall>}
                     <ProductCartFunc>
-                        <Counter/>
-                        <Button func={() => alert("Bought")}>Buy</Button>
+                        <Counter DefaultCount={1} Count={Count} SetCount={setCount}/>
+                        <Button onClick={() => AddCart()}>Buy</Button>
                     </ProductCartFunc>
-                    <TextSmall style={{color: "var(--gray-text)"}} >
-                        Премиум футер петля (340гр), 80% хлопок<br/>
-                        - Size M / L<br/>
-                        - Унисекс<br/>
-                        - Печать + Вышивка<br/>
-                        - Доставка: Почта России<br/>
-                        Рекомендации по выбору размера:<br/>
-                        М - рост 165-175 см<br/>
-                        L - рост 175-185 см
-                    </TextSmall>
+                    <TextSmall style={{color: "var(--gray-text)"}}>{Data.desc}</TextSmall>
                 </ProductCartInfo>
             </ProductCart>
             <hr />
             <Other isMobile={isMobile}>
                 <VerticalText isMobile={isMobile}>Other</VerticalText>
-                <ProductCartMini id={1} name="product 1" price="400"/>
-                <ProductCartMini id={2} name="product 2" price="400"/>
-                <ProductCartMini id={3} name="product 3" price="400"/>
-                <ProductCartMini id={4} name="product 4" price="400"/>
-                <ProductCartMini id={5} name="product 5" price="400"/>
+                {OtherData.map((el, id) => {
+                    return <ProductCartMini key={id} id={el.product_id} img={el.main_img} name={el.name} price={el.price}/>
+                })}
             </Other>
         </div>
     )

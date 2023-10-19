@@ -14,6 +14,7 @@ const Filter = styled.div`
     display: flex;
     flex-direction: ${props => props.isMobile? "row" : "column"};
     justify-content: ${props => props.isMobile? " center" : ""};
+    flex-wrap: ${props => props.isMobile? "wrap" : ""};
 ` 
 
 const FilterButton = styled.div`
@@ -57,14 +58,17 @@ function Catalog() {
         <Container isMobile={isMobile} className={useMediaQuery({ query: '(max-width: 750px)' })? "MobileContainer" : "Container"}>
             <Filter isMobile={isMobile}>
                 <FilterButton active={ NowFilter === "All" ? true : false} onClick={() => SetFilter("All")}>All</FilterButton>
-                <FilterButton active={ NowFilter === "Hoodie" ? true : false} onClick={() => SetFilter("Hoodie")}>Hoodie</FilterButton>
-                <FilterButton active={ NowFilter === "T-Shirt" ? true : false} onClick={() => SetFilter("T-Shirt")}>T-Shirt</FilterButton>
-                <FilterButton active={ NowFilter === "Pants" ? true : false} onClick={() => SetFilter("Pants")}>Pants</FilterButton>
-                <FilterButton active={ NowFilter === "Cap" ? true : false} onClick={() => SetFilter("Cap")}>Cap</FilterButton>
+                <FilterButton active={ NowFilter === 0 ? true : false} onClick={() => SetFilter(0)}>T-Shirt</FilterButton>
+                <FilterButton active={ NowFilter === 1 ? true : false} onClick={() => SetFilter(1)}>Pants</FilterButton>
+                <FilterButton active={ NowFilter === 2 ? true : false} onClick={() => SetFilter(2)}>Hoodie</FilterButton>
+                <FilterButton active={ NowFilter === 3 ? true : false} onClick={() => SetFilter(3)}>Cap</FilterButton>
+                <FilterButton active={ NowFilter === 4 ? true : false} onClick={() => SetFilter(4)}>Shoes</FilterButton>
+                <FilterButton active={ NowFilter === 5 ? true : false} onClick={() => SetFilter(5)}>Bag</FilterButton>
             </Filter>
             <CalalogList isMobile={isMobile}>
                 {Data.map((el, i) => {
-                    if(NowFilter === "All"? true : el.Category === NowFilter){
+                    console.log(el.category_id)
+                    if(NowFilter === "All"? true : el.category_id === NowFilter){
                         return(
                             <ProductCart id={el.product_id} img={el.main_img} name={el.name} price={el.price} onClick={() => window.location.pathname = `/${el.id}`}/>
                         )

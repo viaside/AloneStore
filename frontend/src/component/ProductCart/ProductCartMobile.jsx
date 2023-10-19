@@ -22,13 +22,14 @@ const P = styled.p`
     font-size: 20px;
     padding: 0px;
     margin: 0px;
+    text-align: center;
 `
 
 function ProductCartMobile(props) {
     const {id, img, name, price} = props.props;
 
     return(
-        <ProductCart to={`${name}`} state={name}>
+        <ProductCart to={`${name}`} state={id}>
             <Img src={img}/>
             <P>{name}</P>
             <P>{price}$</P>

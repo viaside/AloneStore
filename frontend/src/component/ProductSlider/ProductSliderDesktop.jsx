@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import styled from "styled-components";
 
 const ProductSlider = styled.div`
@@ -29,6 +29,7 @@ const OtherImg = styled.img`
     width: 70px;
     height: 70px;
     border: 1px solid black;
+    filter: ${props => props.active ? "opacity(50%)" : ""};
 `
 
 const Button = styled.button`
@@ -55,17 +56,16 @@ const RightButtom = styled(Button)`
 function ProductSliderDesktop(props) {
     const {img} = props.props;
     const [nowImg, setImg] = useState(0);
-
     return(
         <ProductSlider>
             <MainCointainer>
                 <LeftButtom active={nowImg === 0? true : false} onClick={() => setImg(nowImg - 1 < 0? nowImg : nowImg - 1)}>&lsaquo;</LeftButtom>
-                <MainImg src={nowImg} alt={nowImg}/>
+                <MainImg src={img[nowImg]} alt="img"/>
                 <RightButtom active={nowImg === img.length - 1? true : false} onClick={() => setImg(nowImg + 1 > img.length - 1? nowImg : nowImg + 1)}>&rsaquo;</RightButtom>
             </MainCointainer>
             <OtherCointainer>
-                {img.map((el) => {
-                    return(<OtherImg src={el} alt={el}/>)
+                {img.map((el, i) => {
+                    return(<OtherImg active={nowImg === i} src={el} alt={el} onClick={() => setImg(i)}/>)
                 })}
             </OtherCointainer>
         </ProductSlider>
