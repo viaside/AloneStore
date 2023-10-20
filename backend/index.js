@@ -96,6 +96,7 @@ app.get('/order', Order.getOrder)
 app.get('/order/:id', Order.getOrderById)
 app.post('/order', Order.createOrder)
 app.put('/order/:id', Order.updateOrder)
+app.put('/orderStatus/:id', Order.ChangeStatusOrder)
 app.delete('/order/:id', Order.deleteOrder)
 
 app.get('/orderDetail', OrderDetail.getOrderDetail)

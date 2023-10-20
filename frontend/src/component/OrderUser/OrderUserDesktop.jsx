@@ -66,7 +66,7 @@ function OrderUserDesktop(props) {
                                 return(
                                     <div id={i} style={{display: "flex", justifyContent: "space-between"}}>
                                         <div style={{display: "flex"}}>
-                                            <Img src={el.img} alt="1" />
+                                            <Img src={el.main_img} alt="1" />
                                             <P style={{paddingRight: 40}}>{el.name}</P>
                                         </div>
                                         <P style={{paddingRight: 40}}>size: {el.size}</P>

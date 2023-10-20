@@ -53,6 +53,7 @@ function Profile() {
     const [NowPage, SetPage] = useState("Info");
     const [Info, setInfo] = useState([]);
     const [Products, setProducts] = useState([]);
+    const [Orders, setOrders] = useState([]);
     const [Login, setLogin] = useState(null); 
     const [Password, setPassword] = useState(null); 
     const [FullName, setFullName] = useState(null); 
@@ -64,7 +65,7 @@ function Profile() {
     const [isShowAddProductModal, showAddProductModal] = useState(false); 
     const isMobile = useMediaQuery({ query: '(max-width: 750px)' });
 
-    useEffect(() => {UpdateInfo()}, []);
+    useEffect(() => {UpdateInfo(); UpdateOrders(); UpdateProduct()}, []);
 
     function UpdateInfo(){
         fetch(`/users/${localStorage.getItem("userId")}`, {
@@ -99,6 +100,26 @@ function Profile() {
         .then(async (data) => {
             setCategory(data)
         })
+    }
+
+    function UpdateOrders(){
+        fetch(`/order`, {
+            method: "GET",
+        })
+        .then((response) => response.json())
+        .then(async (data) => {
+            await data.map(el =>{
+                fetch(`/orderDetail/${el.id}`, {
+                    method: "GET",
+                })
+                .then((response) => response.json())
+                .then(async (dataDetail) => {
+                    el.products = dataDetail;
+                })
+            })
+            await setOrders(data);
+        })
+        .catch((error) => console.log(error));
     }
 
     function DeleteProduct(id){
@@ -151,6 +172,16 @@ function Profile() {
             body: JSON.stringify({product_id: productId, quantity_total: total, quantity_s: s, quantity_m: m, quantity_l: l, quantity_xl: xl})
         };
         fetch('/quantity/' + productId, requestOptions)
+        .then(UpdateProduct());
+        UpdateProduct();
+    }
+    function ChangeStatus(id, status) {
+        const requestOptions = {
+            method: 'PUT',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({status: status})
+        };
+        fetch('/orderStatus/' + id, requestOptions)
         .then(UpdateProduct());
         UpdateProduct();
     }
@@ -239,19 +270,26 @@ function Profile() {
             NowPage ==="Orders" ?
                 <div style={{width: "100%"}}>
                     {Info.is_admin?
-                        <OrderAdmin 
-                            id = {16457597} date = {"20.04.2020"} status = {"in dilevery"} userName = {"1"} totalPrice={1000 } fullName = {"Ivan Voloshin Anatolevich"} 
-                            phoneNumber = {"+7(999)999-99-99"} address = {"Moscow, Chelkovo, Bogorodkiy, 3, 63"} 
-                            products = {[{img: '1', name: "Cap", size: "M", price: 400},{img: '1', name: "Cap", size: "M", price: 400},{img: '1', name: "Cap", size: "M", price: 400},]} 
-                            Desc = {"The shopping cart automatically remembers the entered data (exclusively on your device), so you won't have to fill in the fields next time."}
-                        />
+                        Orders.map((el, i)=> {
+                            return <OrderAdmin key={i}
+                                id = {el.id} date = {el.created_at.slice(0,10)} status = {el.st_name} userName = {el.full_name} totalPrice={0} fullName = {el.full_name} 
+                                phoneNumber = {el.phone_number} address = {el.address} 
+                                products = {el.products} statusId = {el.st_id}
+                                Desc = {el.desc} func={ChangeStatus}
+                            />
+                        })
                         :
-                        <OrderUser 
-                            id = {16457597} date = {"20.04.2020"} status = {"in dilevery"} totalPrice={1000 } fullName = {"Ivan Voloshin Anatolevich"} 
-                            phoneNumber = {"+7(999)999-99-99"} address = {"Moscow, Chelkovo, Bogorodkiy, 3, 63"} 
-                            products = {[{img: '1', name: "Cap", size: "M", price: 400},{img: '1', name: "Cap", size: "M", price: 400},{img: '1', name: "Cap", size: "M", price: 400},]} 
-                            Desc = {"The shopping cart automatically remembers the entered data (exclusively on your device), so you won't have to fill in the fields next time."}
-                        />
+                        Orders.map((el, i) => {
+                            console.log(el);
+                            if(el.user_id == localStorage.getItem("userId")){
+                                return <OrderUser key={i}
+                                    id = {el.id} date = {el.created_at.slice(0,10)} status = {el.st_name} totalPrice={0} fullName = {el.full_name} 
+                                    phoneNumber = {el.phone_number} address = {el.address} 
+                                    products = {el.products} 
+                                    Desc = {el.desc}
+                                />
+                            }
+                        })
                     }
                 </div>
                 :

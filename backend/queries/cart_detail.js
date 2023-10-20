@@ -72,7 +72,6 @@ const updateCartDetail = (request, response) => {
 const updateQuantity = (request, response) => {
     const id = parseInt(request.params.id)
     const { quantity } = request.body
-    console.log(request)
     pool.query(
         'UPDATE public.cart_detail SET quantity = $1 WHERE id = $2',
         [quantity, id],

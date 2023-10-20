@@ -18,7 +18,7 @@ const Info = styled.div`
     display: grid;
     align-items: center;
     width: 100%;
-    grid-template-columns: repeat(6, 16%);
+    grid-template-columns: repeat(6, auto);
 `
 
 const Img = styled.img`
@@ -63,7 +63,7 @@ const Select = styled.select`
 
 
 function OrderUserDesktop(props) {
-    const {id, date, status, userName, totalPrice,fullName, phoneNumber, address, products, Desc} = props.props;
+    const {id, date, status, statusId,userName, totalPrice,fullName, phoneNumber, address, products, Desc, func} = props.props;
     const [isShow, Show] = useState(false);
 
     return(
@@ -74,12 +74,10 @@ function OrderUserDesktop(props) {
                 <p>{address}</p>
                 <P>{date}</P>
                 <P>{totalPrice}$</P>
-                <Select name="status">
-                    <option value="Created" selected={status === "Created"}>Created</option>    
-                    <option value="Paid" selected={status === "Paid"}>Paid</option>    
-                    <option value="Assembled" selected={status === "Assembled"}>Assembled</option>    
-                    <option value="In delivery" selected={status === "In delivery"}>In delivery</option>    
-                    <option value="Completed" selected={status === "Completed"}>Completed</option>    
+                <Select name="status" value={statusId} onChange={(e) => func(id, e.target.value)}>
+                    <option value="0" >Created</option>    
+                    <option value="1" >Delivery</option>    
+                    <option value="2" >Closed</option>    
                 </Select>
             </Info>
             {isShow? 
@@ -88,11 +86,11 @@ function OrderUserDesktop(props) {
                 <P><PGray>Phone number: </PGray> {phoneNumber}</P>
                 <P>Details</P>
                 <div>
-                    {products.map((el, i) => {
+                    {products?.map((el, i) => {
                         return(
                             <div id={i} style={{display: "flex", justifyContent: "space-around"}}>
                                 <div style={{display: "flex"}}>
-                                    <Img src={el.img} alt="1" />
+                                    <Img src={el.main_img} alt="1" />
                                     <P style={{paddingRight: 40}}>{el.name}</P>
                                 </div>
                                 <P style={{paddingRight: 40}}>size: {el.size}</P>

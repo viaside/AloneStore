@@ -12,7 +12,7 @@ const getOrderDetail = (request, response) => {
 const getOrderDetailById = (request, response) => {
     const id = parseInt(request.params.id)
 
-    pool.query('SELECT * FROM public.order_detail WHERE id = $1', [id], (error, results) => {
+    pool.query('SELECT *, det.id as det_id, prod.id as product_id FROM public.order_detail as det INNER JOIN public.products AS prod ON prod.id = det.product_id WHERE det.order_id = $1', [id], (error, results) => {
         if (error) {
             throw error
         }
