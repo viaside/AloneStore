@@ -12,7 +12,7 @@ const getUser = (request, response) => {
 const login = (request, response) => {
     const loginData = request.params.login
     const passwordData = request.params.password
-    pool.query('SELECT * FROM public."user" WHERE login = $1 AND password = $2', [loginData, passwordData], (error, results) => {
+    pool.query('SELECT *, cr.id as cart_id FROM public."user" as us INNER JOIN public.cart as cr ON us.id = cr.user_id WHERE us.login = $1 AND us.password = $2', [loginData, passwordData], (error, results) => {
         if (error) {
             response.status(400).json('not found')
         } else{
@@ -25,7 +25,7 @@ const getUserById = (request, response) => {
     const id = parseInt(request.params.id)
 
     pool.query('SELECT * FROM public."user" WHERE id = $1', [id], (error, results) => {
-        response.status(200).json(results.rows)
+        response.status(200).json(results.rows) 
     })
 }
 
@@ -48,13 +48,13 @@ const createUser = (request, response) => {
         if (error) {
             throw error
         } else{
-            pool.query('INSERT INTO public.cart (user_id, total_price) VALUES ($1, $2)', 
+            pool.query('INSERT INTO public.cart (user_id, total_price) VALUES ($1, $2) RETURNING id', 
             [results.rows[0].id, 0], (error, results) => {
                 if (error) {
                     throw error
                 }
             })
-            response.status(201).send("SUCCESS")
+            response.status(201).send(results.rows[0].id)
         }
     })
 }

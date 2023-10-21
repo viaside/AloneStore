@@ -62,7 +62,8 @@ function Login() {
                     if(e.length > 0){
                         localStorage.setItem("isLogined", true);
                         window.location.href = '/';
-                        localStorage.setItem("userId", e[0].id);
+                        localStorage.setItem("userId", e[0].user_id);
+                        localStorage.setItem("cartId", e[0].cart_id);
                     } else{
                         alert("not found")
                     }

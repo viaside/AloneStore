@@ -138,10 +138,9 @@ function Profile() {
         let MainImg = new File([mainImg?.data], `${name.replace(" ", "")}_main.jpg`);
         let FrontImg = new File([frontImg?.data], `${name.replace(" ", "")}_front.jpg`);
         let BackImg = new File([backImg?.data], `${name.replace(" ", "")}_back.jpg`);
-        console.log(frontImg)
-        formData.append("file", mainImg?.data? MainImg : mainImg);
-        formData.append("file", frontImg?.data? FrontImg : frontImg);
-        formData.append("file", backImg?.data? BackImg : backImg);
+        formData.append("file", MainImg);
+        formData.append("file", FrontImg);
+        formData.append("file", BackImg);
         formData.append("fileName", name);
         formData.append("name", name);
         formData.append("desc", desc);
@@ -245,7 +244,7 @@ function Profile() {
                         <FilterButton active={ NowPage === "Info" ? true : false} onClick={() => SetPage("Info")}>Info</FilterButton>
                         <FilterButton active={ NowPage === "Orders" ? true : false} onClick={() => SetPage("Orders")}>Orders</FilterButton>
                         <div style={{width: "40%"}}>
-                            <Button onClick={() => {localStorage.setItem("isLogined", false); window.location.href = "/"}}>Log out</Button>
+                            <Button onClick={() => {localStorage.setItem("isLogined", false); localStorage.setItem("cartId", null); localStorage.setItem("userId", null); window.location.href = "/"}}>Log out</Button>
                         </div>
                     </Filter>
                 }

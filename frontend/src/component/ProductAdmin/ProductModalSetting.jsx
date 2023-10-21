@@ -83,9 +83,9 @@ function ProductModalSetting(props){
                 <ElContainer>
                     <P>Image</P>
                     <div style={{display: "flex"}}>
-                        <InputImage name="main_img" type="file" accept=".png,.jpg,.jpeg,.gif"  src={Img?.main_img} onChange={setImg } Img={Img} alt={"main"}/>
-                        <InputImage name="front_img" type="file" accept=".png,.jpg,.jpeg,.gif" src={Img?.front_img} onChange={setImg   } Img={Img} alt={"front"}/>
-                        <InputImage name="back_img" type="file" accept=".png,.jpg,.jpeg,.gif"  src={Img?.back_img} onChange={setImg } Img={Img} alt={"back"}/>
+                        <InputImage name="main_img" type="file" accept=".png,.jpg,.jpeg,.gif"  src={Img?.main_img} onChange={setImg}  Img={Img} alt={"main"}/>
+                        <InputImage name="front_img" type="file" accept=".png,.jpg,.jpeg,.gif" src={Img?.front_img} onChange={setImg}  Img={Img} alt={"front"}/>
+                        <InputImage name="back_img" type="file" accept=".png,.jpg,.jpeg,.gif"  src={Img?.back_img} onChange={setImg}  Img={Img} alt={"back"}/>
                     </div>
                 </ElContainer>
                 <div style={{display: "flex", justifyContent: "space-around", width: "100%"}}>

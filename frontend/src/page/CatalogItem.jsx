@@ -110,7 +110,7 @@ function CatalogItem() {
         fetch('/cartDetailUserId/'+ localStorage.getItem("userId"),{method:'GET'})
         .then((response) => response.json())
         .then(result => {
-            const CartId = result[0].id;
+            const CartId =  result[0].id;
             localStorage.setItem("cartId", CartId);
             const requestOptions = {
                 method: 'POST',

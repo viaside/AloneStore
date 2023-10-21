@@ -48,11 +48,6 @@ const createOrder = (request, response) => {
                             })
                         })
                     })
-                    pool.query('DELETE FROM public.cart WHERE id = $1', [id], (error, results) => {
-                        if (error) {
-                            throw error
-                        }
-                    })
                 })
             response.status(201).send(`Order added with ID: ${results.insertId}`)
         })

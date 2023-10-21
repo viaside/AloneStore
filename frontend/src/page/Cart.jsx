@@ -100,7 +100,7 @@ function Cart() {
             body: JSON.stringify({id: localStorage.getItem("cartId"), FullName: FullName, Address: Address, PhoneNumber: PhoneNumber})
         })
         .then((response) => response.json())
-        .then(UpdateCart())
+        .then(() => {UpdateCart(); alert("add order")})
         .catch((error) => console.log(error));
     }
 
